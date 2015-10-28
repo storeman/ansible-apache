@@ -8,15 +8,18 @@ DirectoryIndex index.php index.html
 {% if vhost.serveralias is defined %}
   ServerAlias {{ vhost.serveralias }}
 {% endif %}
+
+{% if vhost.documentroot is defined %}
   DocumentRoot {{ vhost.documentroot }}
+{% endif %}
 
 {% if vhost.serveradmin is defined %}
   ServerAdmin {{ vhost.serveradmin }}
 {% endif %}
   <Directory "{{ vhost.documentroot }}">
-    AllowOverride All
-    Options -Indexes +FollowSymLinks
-    Require all granted
+	{% if vhost.extra_document_parameters is defined %}
+	  {{ vhost.extra_document_parameters }}
+	{% endif %}
   </Directory>
 {% if vhost.extra_parameters is defined %}
   {{ vhost.extra_parameters }}
@@ -38,7 +41,6 @@ DirectoryIndex index.php index.html
   SSLCipherSuite {{ apache_ssl_cipher_suite }}
   SSLProtocol {{ apache_ssl_protocol }}
   SSLHonorCipherOrder On
-  SSLCompression off
   SSLCertificateFile {{ vhost.certificate_file }}
   SSLCertificateKeyFile {{ vhost.certificate_key_file }}
 {% if vhost.certificate_chain_file is defined %}
@@ -49,9 +51,9 @@ DirectoryIndex index.php index.html
   ServerAdmin {{ vhost.serveradmin }}
 {% endif %}
   <Directory "{{ vhost.documentroot }}">
-    AllowOverride All
-    Options -Indexes +FollowSymLinks
-    Require all granted
+	{% if vhost.extra_document_parameters is defined %}
+	  {{ vhost.extra_document_parameters }}
+	{% endif %}
   </Directory>
 {% if vhost.extra_parameters is defined %}
   {{ vhost.extra_parameters }}
